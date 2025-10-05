@@ -1,14 +1,241 @@
-import * as React from "react";
-import { AppSidebar } from "../components/app-sidebar";
+import { Layout, Model } from "flexlayout-react";
+import "flexlayout-react/style/light.css";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "../components/app-sidebar";
 import { SiteHeader } from "../components/site-header";
-import { SectionCards } from "../components/section-cards";
-import { ChartAreaInteractive } from "../components/chart-area-interactive";
-import { DataTable } from "../components/data-table";
 
-import data from "./data.json";
+const json = {
+  global: {
+    splitterEnableHandle: true,
+    tabEnablePopout: true,
+    tabSetEnableActiveIcon: true,
+    tabSetMinWidth: 130,
+    tabSetMinHeight: 100,
+    tabSetEnableTabScrollbar: true,
+    borderMinSize: 100,
+    borderEnableTabScrollbar: true,
+  },
+  borders: [
+    {
+      type: "border",
+      location: "bottom",
+      children: [
+        {
+          type: "tab",
+          id: "#0ae8e0fb-dba2-4b14-9d75-08781231479a",
+          name: "Output",
+          component: "grid",
+          enableClose: false,
+          icon: "images/bar_chart.svg",
+        },
+        {
+          type: "tab",
+          id: "#803a2efe-e507-4735-9c2a-46ce6042c1a2",
+          name: "Terminal",
+          component: "grid",
+          enableClose: false,
+          icon: "images/terminal.svg",
+        },
+        {
+          type: "tab",
+          id: "#7bac972e-fd5f-4582-a511-4feede448394",
+          name: "Layout JSON",
+          component: "json",
+        },
+      ],
+    },
+    {
+      type: "border",
+      location: "left",
+      children: [
+        {
+          type: "tab",
+          id: "#21c49854-be85-4e32-96c3-61962f71bc15",
+          name: "Navigation",
+          altName: "The Navigation Tab",
+          component: "grid",
+          enableClose: false,
+          icon: "images/folder.svg",
+        },
+      ],
+    },
+    {
+      type: "border",
+      location: "right",
+      children: [
+        {
+          type: "tab",
+          id: "#ec253996-0724-416b-a097-23f85a89afbe",
+          name: "Options",
+          component: "grid",
+          enableClose: false,
+          icon: "images/settings.svg",
+        },
+      ],
+    },
+  ],
+  layout: {
+    type: "row",
+    id: "#11b6dde6-2808-4a87-b378-dd6ed2a92547",
+    children: [
+      {
+        type: "tabset",
+        id: "#018c109c-20ab-4458-84c8-1817d2e7d81b",
+        weight: 33,
+        children: [
+          {
+            type: "tab",
+            id: "#4fcdc630-6742-474a-9b67-cb40c36e2d00",
+            name: "OpenLayers Map",
+            component: "map",
+            enablePopoutOverlay: true,
+          },
+        ],
+      },
+      {
+        type: "row",
+        id: "#cec0f587-2651-4bb2-a755-006a7111bb11",
+        weight: 33,
+        children: [
+          {
+            type: "tabset",
+            id: "#770c0042-3776-4576-becc-90b627bb8c91",
+            weight: 50,
+            selected: 0,
+            children: [
+              {
+                type: "tab",
+                id: "#a7dff07f-a37a-4d58-9853-7b91c465101c",
+                name: "ChartJS",
+                component: "chart",
+                enableWindowReMount: true,
+                enablePopoutOverlay: true,
+              },
+              {
+                type: "tab",
+                id: "#963c76b2-ea75-4cf9-8677-823fb1aec5ea",
+                name: "Grid 1",
+                component: "grid",
+                icon: "images/article.svg",
+              },
+              {
+                type: "tab",
+                id: "#8bba601c-b902-432a-bc3f-5e076dafdf1d",
+                name: "Grid 2",
+                component: "grid",
+                icon: "images/article.svg",
+              },
+              {
+                type: "tab",
+                id: "#b89da41a-933d-4784-b4b9-c9a7d19aea0d",
+                name: "Grid 3",
+                component: "grid",
+                icon: "images/article.svg",
+              },
+              {
+                type: "tab",
+                id: "#b9ffea20-84d7-430d-ad16-947b26127fbc",
+                name: "Grid 4",
+                component: "grid",
+                icon: "images/article.svg",
+              },
+              {
+                type: "tab",
+                id: "#bebb3b66-bcba-449e-a9b8-774e92fa8c37",
+                name: "Grid 5",
+                component: "grid",
+                icon: "images/article.svg",
+              },
+            ],
+            active: true,
+          },
+          {
+            type: "tabset",
+            id: "#c0b4aba3-dba9-4883-a384-1b299518fd0b",
+            weight: 50,
+            children: [
+              {
+                type: "tab",
+                id: "#285406e5-6795-4e17-b10d-6ff8e512ba62",
+                name: "AGGrid",
+                component: "aggrid",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "row",
+        id: "#6b135a77-d283-404e-8a92-4bb5bf2579cb",
+        weight: 33,
+        children: [
+          {
+            type: "tabset",
+            id: "#b97c51f2-7f2c-490d-9cbb-6fcb189c2343",
+            weight: 50,
+            children: [
+              {
+                type: "tab",
+                id: "#0e23b4b3-498a-4625-a916-b1e6e19eaf3f",
+                name: "Wikipedia",
+                component: "multitype",
+                config: {
+                  type: "url",
+                  data: "https://en.wikipedia.org/wiki/Main_Page",
+                },
+              },
+              {
+                type: "tab",
+                id: "#31b3af95-2fc9-4511-8d5d-1e6255b92eae",
+                name: "MUI",
+                enablePopout: false,
+                component: "mui",
+              },
+            ],
+          },
+          {
+            type: "tabset",
+            id: "#a1d1e2b2-246c-4116-a616-cb3d186b5743",
+            weight: 50,
+            children: [
+              {
+                type: "tab",
+                id: "#4784d2d4-24a4-4ef2-ac6e-7a3ea7b03ba3",
+                name: "MUI Grid",
+                enablePopout: false,
+                component: "muigrid",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  popouts: {},
+};
 
-export default function Page() {
+export default function App() {
+  // create model once
+  const model = Model.fromJson(json);
+
+  // factory renders content for nodes based on node.getComponent()
+  const factory = (node) => {
+    const component = node.getComponent();
+    const config = node.getConfig ? node.getConfig() : {};
+
+    if (component === "text") {
+      return (
+        <div style={{ padding: 12, height: "100%", overflow: "auto" }}>
+          <h3 style={{ marginTop: 0 }}>{node.getName()}</h3>
+          <div>{config.text}</div>
+        </div>
+      );
+    }
+
+    // default fallback
+    return <div style={{ padding: 8 }}>Unknown component: {component}</div>;
+  };
+
   return (
     <SidebarProvider
       style={
@@ -21,12 +248,11 @@ export default function Page() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-col flex-1 px-4 py-4">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <SectionCards />
-              <ChartAreaInteractive />
-              <DataTable data={data} />
+            <div>Toolbar</div>
+            <div className="flex flex-1 relative">
+              <Layout model={model} factory={factory} />
             </div>
           </div>
         </div>
