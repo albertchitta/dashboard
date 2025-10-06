@@ -252,7 +252,7 @@ export default function App() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div>Toolbar</div>
             <div className="flex flex-1 relative">
-              <Layout model={model} factory={factory} />
+              <Layout model={model} factory={factory} realtimeResize={true} />
             </div>
           </div>
         </div>

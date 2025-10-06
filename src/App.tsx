@@ -1,5 +1,5 @@
-import { ThemeProvider } from "./app/components/theme-provider";
-import Page from "./app/dashboard/page";
+import { ThemeProvider } from "./app/theme-provider";
+import Page from "./app/page";
 
 function App() {
   return (
