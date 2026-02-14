@@ -1,8 +1,17 @@
 import { Layout, Model, TabNode, type IJsonModel } from "flexlayout-react";
-import "flexlayout-react/style/light.css";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import "flexlayout-react/style/rounded.css";
+import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { SiteHeader } from "../components/site-header";
+import { ChartArea } from "../components/charts/chart-area";
+import { ChartBar } from "../components/charts/chart-bar";
+import { ChartLine } from "../components/charts/chart-line";
+import { ChartPie } from "../components/charts/chart-pie";
+import { ChartRadar } from "../components/charts/chart-radar";
+import { ChartRadial } from "../components/charts/chart-radial";
+import { DataTable } from "../components/tables/data-table";
+
+import data from "./data.json";
 
 const json: IJsonModel = {
   global: {
@@ -79,20 +88,6 @@ const json: IJsonModel = {
     id: "#11b6dde6-2808-4a87-b378-dd6ed2a92547",
     children: [
       {
-        type: "tabset",
-        id: "#018c109c-20ab-4458-84c8-1817d2e7d81b",
-        weight: 33,
-        children: [
-          {
-            type: "tab",
-            id: "#4fcdc630-6742-474a-9b67-cb40c36e2d00",
-            name: "OpenLayers Map",
-            component: "map",
-            enablePopoutOverlay: true,
-          },
-        ],
-      },
-      {
         type: "row",
         id: "#cec0f587-2651-4bb2-a755-006a7111bb11",
         weight: 33,
@@ -106,44 +101,44 @@ const json: IJsonModel = {
               {
                 type: "tab",
                 id: "#a7dff07f-a37a-4d58-9853-7b91c465101c",
-                name: "ChartJS",
-                component: "chart",
+                name: "Area Chart",
+                component: "area",
                 enableWindowReMount: true,
                 enablePopoutOverlay: true,
               },
               {
                 type: "tab",
                 id: "#963c76b2-ea75-4cf9-8677-823fb1aec5ea",
-                name: "Grid 1",
-                component: "grid",
+                name: "Bar Chart",
+                component: "bar",
                 icon: "images/article.svg",
               },
               {
                 type: "tab",
                 id: "#8bba601c-b902-432a-bc3f-5e076dafdf1d",
-                name: "Grid 2",
-                component: "grid",
+                name: "Line Chart",
+                component: "line",
                 icon: "images/article.svg",
               },
               {
                 type: "tab",
                 id: "#b89da41a-933d-4784-b4b9-c9a7d19aea0d",
-                name: "Grid 3",
-                component: "grid",
+                name: "Pie Chart",
+                component: "pie",
                 icon: "images/article.svg",
               },
               {
                 type: "tab",
                 id: "#b9ffea20-84d7-430d-ad16-947b26127fbc",
-                name: "Grid 4",
-                component: "grid",
+                name: "Radar Chart",
+                component: "radar",
                 icon: "images/article.svg",
               },
               {
                 type: "tab",
                 id: "#bebb3b66-bcba-449e-a9b8-774e92fa8c37",
-                name: "Grid 5",
-                component: "grid",
+                name: "Radial Chart",
+                component: "radial",
                 icon: "images/article.svg",
               },
             ],
@@ -157,8 +152,8 @@ const json: IJsonModel = {
               {
                 type: "tab",
                 id: "#285406e5-6795-4e17-b10d-6ff8e512ba62",
-                name: "AGGrid",
-                component: "aggrid",
+                name: "Data Table",
+                component: "table",
               },
             ],
           },
@@ -184,13 +179,6 @@ const json: IJsonModel = {
                   data: "https://en.wikipedia.org/wiki/Main_Page",
                 },
               },
-              {
-                type: "tab",
-                id: "#31b3af95-2fc9-4511-8d5d-1e6255b92eae",
-                name: "MUI",
-                enablePopout: false,
-                component: "mui",
-              },
             ],
           },
           {
@@ -201,9 +189,9 @@ const json: IJsonModel = {
               {
                 type: "tab",
                 id: "#4784d2d4-24a4-4ef2-ac6e-7a3ea7b03ba3",
-                name: "MUI Grid",
+                name: "Data Table",
                 enablePopout: false,
-                component: "muigrid",
+                component: "table",
               },
             ],
           },
@@ -230,6 +218,57 @@ export default function App() {
           <div>{config.text}</div>
         </div>
       );
+    } else if (component === "multitype") {
+      try {
+        const config = node.getConfig();
+        if (config.type === "url") {
+          return (
+            <iframe
+              title={node.getId()}
+              src={config.data}
+              style={{
+                display: "block",
+                border: "none",
+                boxSizing: "border-box",
+              }}
+              width="100%"
+              height="100%"
+            />
+          );
+        } else if (config.type === "html") {
+          return <div dangerouslySetInnerHTML={{ __html: config.data }} />;
+        } else if (config.type === "text") {
+          return (
+            <textarea
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                resize: "none",
+                boxSizing: "border-box",
+                border: "none",
+              }}
+              defaultValue={config.data}
+            />
+          );
+        }
+      } catch (e) {
+        return <div>{String(e)}</div>;
+      }
+    } else if (component === "area") {
+      return <ChartArea />;
+    } else if (component === "bar") {
+      return <ChartBar />;
+    } else if (component === "line") {
+      return <ChartLine />;
+    } else if (component === "pie") {
+      return <ChartPie />;
+    } else if (component === "radar") {
+      return <ChartRadar />;
+    } else if (component === "radial") {
+      return <ChartRadial />;
+    } else if (component === "table") {
+      return <DataTable data={data} />;
     }
 
     // default fallback
