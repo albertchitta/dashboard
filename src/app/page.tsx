@@ -1,10 +1,10 @@
-import { Layout, Model } from "flexlayout-react";
+import { Layout, Model, TabNode, type IJsonModel } from "flexlayout-react";
 import "flexlayout-react/style/light.css";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { SiteHeader } from "../components/site-header";
 
-const json = {
+const json: IJsonModel = {
   global: {
     splitterEnableHandle: true,
     tabEnablePopout: true,
@@ -219,7 +219,7 @@ export default function App() {
   const model = Model.fromJson(json);
 
   // factory renders content for nodes based on node.getComponent()
-  const factory = (node) => {
+  const factory = (node: TabNode) => {
     const component = node.getComponent();
     const config = node.getConfig ? node.getConfig() : {};
 
