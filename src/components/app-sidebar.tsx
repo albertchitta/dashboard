@@ -1,22 +1,13 @@
-"use client";
-
 import * as React from "react";
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
   IconDatabase,
-  IconFileAi,
-  IconFileDescription,
   IconFileWord,
   IconFolder,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react";
 
 import { NavMain } from "./nav-main";
@@ -38,79 +29,21 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
+  dashboards: [
     {
-      title: "Dashboard",
+      name: "Data Library",
       url: "#",
-      icon: IconDashboard,
+      icon: IconDatabase,
     },
     {
-      title: "Lifecycle",
+      name: "Reports",
       url: "#",
-      icon: IconListDetails,
+      icon: IconReport,
     },
     {
-      title: "Analytics",
+      name: "Word Assistant",
       url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      icon: IconFileWord,
     },
   ],
   navSecondary: [
@@ -130,26 +63,26 @@ const data = {
       icon: IconSearch,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const [dashboards, setDashboards] = React.useState(data.dashboards);
+
+  const addDashboard = (name: string) => {
+    const newDashboard = {
+      name,
+      url: "#",
+      icon: IconFolder,
+    };
+    setDashboards([...dashboards, newDashboard]);
+  };
+
+  const deleteDashboard = (name: string) => {
+    setDashboards(dashboards.filter((dashboard) => dashboard.name !== name));
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -168,8 +101,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.documents} />
-        {/* <NavDocuments items={data.documents} /> */}
+        <NavMain
+          items={dashboards}
+          onAddItem={addDashboard}
+          onDeleteItem={deleteDashboard}
+        />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

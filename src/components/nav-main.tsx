@@ -1,5 +1,4 @@
-"use client";
-
+import * as React from "react";
 import {
   IconCirclePlusFilled,
   IconDots,
@@ -38,60 +37,80 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { Field, FieldGroup } from "./ui/field";
 
 export function NavMain({
   items,
+  onAddItem,
+  onDeleteItem,
 }: {
   items: {
     name: string;
     url: string;
     icon: Icon;
   }[];
+  onAddItem?: (name: string) => void;
+  onDeleteItem?: (name: string) => void;
 }) {
   const { isMobile } = useSidebar();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    if (name && onAddItem) {
+      onAddItem(name);
+      e.currentTarget.reset();
+      setIsDialogOpen(false);
+    }
+  };
 
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <Dialog>
-              <form>
-                <DialogTrigger>
-                  <SidebarMenuButton
-                    tooltip="Create Dashboard"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-                  >
-                    <IconCirclePlusFilled />
-                    <span>Create Dashboard</span>
-                  </SidebarMenuButton>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Create Dashboard</DialogTitle>
-                    <DialogDescription>
-                      Add a name to the dashboard. Click save when
-                      you&apos;re done.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4">
-                    <div className="grid gap-3">
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger>
+                <SidebarMenuButton
+                  tooltip="Create Dashboard"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+                >
+                  <IconCirclePlusFilled />
+                  <span>Create Dashboard</span>
+                </SidebarMenuButton>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Create Dashboard</DialogTitle>
+                  <DialogDescription>
+                    Add a name to the dashboard. Click save when you&apos;re
+                    done.
+                  </DialogDescription>
+                </DialogHeader>
+                <form
+                  onSubmit={handleSubmit}
+                  className="grid w-full gap-4 py-4"
+                >
+                  <FieldGroup>
+                    <Field>
                       <Label htmlFor="name-1">Name</Label>
                       <Input
                         id="name-1"
                         name="name"
                         defaultValue="New Dashboard"
                       />
-                    </div>
-                  </div>
+                    </Field>
+                  </FieldGroup>
                   <DialogFooter>
                     <DialogClose asChild>
                       <Button variant="outline">Cancel</Button>
                     </DialogClose>
                     <Button type="submit">Save changes</Button>
                   </DialogFooter>
-                </DialogContent>
-              </form>
+                </form>
+              </DialogContent>
             </Dialog>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -119,16 +138,10 @@ export function NavMain({
                   side={isMobile ? "bottom" : "right"}
                   align={isMobile ? "end" : "start"}
                 >
-                  <DropdownMenuItem>
-                    <IconFolder />
-                    <span>Open</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <IconShare3 />
-                    <span>Share</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive">
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => onDeleteItem?.(item.name)}
+                  >
                     <IconTrash />
                     <span>Delete</span>
                   </DropdownMenuItem>

@@ -1,5 +1,4 @@
 import { Layout, Model, TabNode, type IJsonModel } from "flexlayout-react";
-import "flexlayout-react/style/rounded.css";
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { SiteHeader } from "../components/site-header";
@@ -10,6 +9,8 @@ import { ChartPie } from "../components/charts/chart-pie";
 import { ChartRadar } from "../components/charts/chart-radar";
 import { ChartRadial } from "../components/charts/chart-radial";
 import { DataTable } from "../components/tables/data-table";
+
+import "flexlayout-react/style/rounded.css";
 
 import data from "./data.json";
 
