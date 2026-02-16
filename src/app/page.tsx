@@ -203,7 +203,7 @@ const json: IJsonModel = {
   popouts: {},
 };
 
-export default function App() {
+export default function Page() {
   // create model once
   const model = Model.fromJson(json);
 

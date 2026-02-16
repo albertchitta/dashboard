@@ -13,6 +13,7 @@ import {
 import { NavMain } from "./nav-main";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -22,13 +23,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useState } from "react";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   dashboards: [
     {
       name: "Data Library",
@@ -65,10 +62,9 @@ const data = {
   ],
 };
 
-export function AppSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
-  const [dashboards, setDashboards] = React.useState(data.dashboards);
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [dashboards, setDashboards] = useState(data.dashboards);
+  const { user } = useAuth();
 
   const addDashboard = (name: string) => {
     const newDashboard = {
@@ -108,9 +104,7 @@ export function AppSidebar({
         />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
     </Sidebar>
   );
 }

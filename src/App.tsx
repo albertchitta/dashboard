@@ -1,30 +1,9 @@
-import { useEffect, useState } from "react";
-import { supabase } from "./lib/supabase";
 import { LoginPage } from "./views/Login";
-import type { User } from "@supabase/supabase-js";
 import PublicRoutes from "./routes/PublicRoutes";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
-function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Check current session
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      console.log("Current user:", user);
-      setUser(user);
-      setLoading(false);
-    });
-
-    // Listen for auth changes (including sign out)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+function AppContent() {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -40,6 +19,14 @@ function App() {
   }
 
   return <>{user ? <PublicRoutes /> : <LoginPage />}</>;
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
 
 export default App;
