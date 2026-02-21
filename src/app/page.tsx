@@ -13,6 +13,7 @@ import { DataTable } from "../components/tables/data-table";
 import "flexlayout-react/style/rounded.css";
 
 import data from "./data.json";
+import { useRef } from "react";
 
 const json: IJsonModel = {
   global: {
@@ -61,8 +62,8 @@ const json: IJsonModel = {
         {
           type: "tab",
           id: "#21c49854-be85-4e32-96c3-61962f71bc15",
-          name: "Navigation",
-          altName: "The Navigation Tab",
+          name: "Components",
+          altName: "The Components Tab",
           component: "grid",
           enableClose: false,
           icon: "images/folder.svg",
@@ -204,6 +205,9 @@ const json: IJsonModel = {
 };
 
 export default function Page() {
+  const layoutRef = useRef<Layout | null>(null);
+  const nextGridIndex = useRef<number>(1);
+
   // create model once
   const model = Model.fromJson(json);
 
@@ -276,6 +280,23 @@ export default function Page() {
     return <div style={{ padding: 8 }}>Unknown component: {component}</div>;
   };
 
+  const onDragStart =
+    (componentType: string, componentName: string) =>
+    (event: React.DragEvent<HTMLElement>) => {
+      event.stopPropagation();
+      const tabName = componentName + " " + nextGridIndex.current++;
+      event.dataTransfer.setData(
+        "text/plain",
+        "FlexLayoutTab:" + JSON.stringify({ name: tabName }),
+      );
+      layoutRef.current!.setDragComponent(event.nativeEvent, tabName, 10, 10);
+      layoutRef.current!.addTabWithDragAndDrop(event.nativeEvent, {
+        name: tabName,
+        component: componentType,
+        icon: "images/article.svg",
+      });
+    };
+
   return (
     <SidebarProvider
       style={
@@ -290,9 +311,71 @@ export default function Page() {
         <SiteHeader />
         <div className="flex flex-col flex-1 px-4 py-4">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <div>Toolbar</div>
+            <div className="flex gap-2 p-3 border rounded-lg bg-background">
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-blue-50 hover:bg-blue-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Area Chart"
+                onDragStart={onDragStart("area", "Area Chart")}
+              >
+                📊 Area Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-green-50 hover:bg-green-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Bar Chart"
+                onDragStart={onDragStart("bar", "Bar Chart")}
+              >
+                📊 Bar Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-purple-50 hover:bg-purple-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Line Chart"
+                onDragStart={onDragStart("line", "Line Chart")}
+              >
+                📈 Line Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-yellow-50 hover:bg-yellow-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Pie Chart"
+                onDragStart={onDragStart("pie", "Pie Chart")}
+              >
+                🥧 Pie Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-pink-50 hover:bg-pink-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Radar Chart"
+                onDragStart={onDragStart("radar", "Radar Chart")}
+              >
+                🎯 Radar Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-indigo-50 hover:bg-indigo-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Radial Chart"
+                onDragStart={onDragStart("radial", "Radial Chart")}
+              >
+                ⭕ Radial Chart
+              </button>
+              <button
+                className="toolbar_control drag-from px-4 py-2 rounded border bg-gray-50 hover:bg-gray-100 cursor-grab active:cursor-grabbing"
+                draggable={true}
+                title="Drag to add Data Table"
+                onDragStart={onDragStart("table", "Data Table")}
+              >
+                📋 Data Table
+              </button>
+            </div>
             <div className="flex flex-1 relative">
-              <Layout model={model} factory={factory} realtimeResize={true} />
+              <Layout
+                ref={layoutRef}
+                model={model}
+                factory={factory}
+                realtimeResize={true}
+              />
             </div>
           </div>
         </div>
